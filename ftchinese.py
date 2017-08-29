@@ -21,25 +21,26 @@ Argparser for usage ./ftchinese.py seqEnd
 '''
 def parser_args():
     parser = ArgumentParser(description='Detect FTChinese URLs and find out those blocked.')
-    parser.add_argument("seqEnd", type=int, default='1073715', help='Read input number as the end of the sequence')
+    parser.add_argument("seqEnd", type=int, default='1073787', nargs='?', help='Read input number as the end of the sequence')
     return parser.parse_args()
 
 '''
 Generate a list full of newID in order to add filters for test.
 '''
 def genIDSeq(seqEnd):
-    for i in range(1000001, seqEnd):
+    # Publication date: http://www.ftchinese.com/archiver/2005-07-22
+    for i in range(1000099, seqEnd):
         yield(i)
 
 def main():
     args = parser_args()
-    data = genIDSeq(args.seqEnd)
-    with open('newID.txt', 'w') as fID:
+    data = genIDSeq(args.seqEnd+1)
+    with open('newsID.txt', 'w') as fID:
         for j in data:
-            fID.write(str(j).zfill(9) + '\n')
-
+            fID.write('http://www.ftchinese.com/' + str(j).zfill(9) + '\n')
+    
 if __name__ == '__main__':
-    if len(sys.argv) < 2 or len(sys.argv) > 2 :
+    if len(sys.argv) > 2 :
         print('\nRange of newsID is missing. Use option -h to check for help. Exiting......')
         sys.exit(1)
     main()
